@@ -22,7 +22,7 @@
 
         <div class="menu-title" style="margin-top: 20px;">Manajemen Desa</div>
         <li class="menu-item">
-            <a href="#" class="{{ request()->is('admin/potensi*') ? 'active' : '' }}">
+            <a href="{{ url('/admin/potensi') }}" class="{{ request()->is('admin/potensi*') ? 'active' : '' }}">
                 <span class="icon">🌱</span> Potensi Desa
             </a>
         </li>
