@@ -2,137 +2,76 @@
 
 @section('title', 'Kelola Potensi Desa - SID Gunung Sembung')
 
-@push('styles')
-<style>
-    .table-section {
-        background-color: var(--white);
-        border-radius: 12px;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-        border: 1px solid var(--border);
-        overflow: hidden;
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        text-align: left;
-    }
-
-    th {
-        padding: 15px 20px;
-        background-color: #F8FAFC;
-        color: var(--text-muted);
-        font-weight: 600;
-        font-size: 13px;
-        text-transform: uppercase;
-        border-bottom: 1px solid var(--border);
-    }
-
-    td {
-        padding: 15px 20px;
-        border-bottom: 1px solid var(--border);
-        font-size: 14px;
-        vertical-align: middle;
-    }
-
-    tr:hover td {
-        background-color: #F8FAFC;
-    }
-
-    .status {
-        padding: 5px 10px;
-        border-radius: 20px;
-        font-size: 12px;
-        font-weight: 600;
-    }
-
-    .publish {
-        background-color: #DCFCE7;
-        color: #16A34A;
-    }
-
-    .draft {
-        background-color: #F1F5F9;
-        color: #64748B;
-    }
-
-    .img {
-        width: 60px;
-        height: 40px;
-        background: #e2e8f0;
-        border-radius: 6px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 10px;
-        color: #94a3b8;
-    }
-
-    .action a {
-        margin-right: 10px;
-        text-decoration: none;
-        font-weight: 600;
-        font-size: 13px;
-    }
-
-    .edit { color: #0284c7; }
-    .delete { color: #ef4444; }
-</style>
-@endpush
-
 @section('content')
-<div class="page-header">
-    <h1>Kelola Potensi Desa</h1>
-    <a href="#" class="btn-action">+ Tambah Potensi Baru</a>
+
+<div class="flex justify-between items-center mb-[30px]">
+    <h1 class="m-0 text-[24px] text-text-main font-bold">Kelola Potensi Desa</h1>
+
+    <a href="{{ route('admin.potensi.create') }}" class="bg-primary text-white px-[20px] py-[10px] rounded-[8px] font-semibold flex items-center gap-[8px] transition-colors duration-300 hover:bg-[#0F766E] no-underline">
+        <span>+</span> Tambah Potensi Baru
+    </a>
 </div>
 
-<div class="table-section">
-    <table>
+@if(session('success'))
+<div class="bg-[#DCFCE7] text-[#16A34A] p-[15px] rounded-[8px] mb-[20px] border border-[#BBF7D0]">
+    {{ session('success') }}
+</div>
+@endif
+
+<div class="bg-white rounded-[12px] shadow-[0_1px_3px_rgba(0,0,0,0.05)] border border-border overflow-hidden overflow-x-auto">
+    <table class="w-full border-collapse text-left min-w-max">
         <thead>
-            <tr>
-                <th>No</th>
-                <th>Gambar</th>
-                <th>Judul Potensi</th>
-                <th>Kategori</th>
-                <th>Status</th>
-                <th>Aksi</th>
+            <tr class="bg-[#F8FAFC] border-b border-border">
+                <th class="w-[5%] px-[20px] py-[15px] text-text-muted font-semibold text-[13px] uppercase tracking-wide">No</th>
+                <th class="w-[10%] px-[20px] py-[15px] text-text-muted font-semibold text-[13px] uppercase tracking-wide">Gambar</th>
+                <th class="w-[30%] px-[20px] py-[15px] text-text-muted font-semibold text-[13px] uppercase tracking-wide">Judul Potensi</th>
+                <th class="w-[20%] px-[20px] py-[15px] text-text-muted font-semibold text-[13px] uppercase tracking-wide">Kategori</th>
+                <th class="w-[15%] px-[20px] py-[15px] text-text-muted font-semibold text-[13px] uppercase tracking-wide">Status</th>
+                <th class="w-[20%] px-[20px] py-[15px] text-text-muted font-semibold text-[13px] uppercase tracking-wide">Aksi</th>
             </tr>
         </thead>
-
         <tbody>
-
-            <!-- DATA DUMMY 1 -->
-            <tr>
-                <td>1</td>
-                <td><div class="img">IMG</div></td>
-                <td>
-                    <strong>Contoh Produk UMKM</strong><br>
-                    <small style="color:#94a3b8;">Pengelola: BUMDes</small>
+            @forelse($data as $index => $potensi)
+            <tr class="border-b border-border last:border-none transition-colors duration-200 hover:bg-[#F8FAFC]">
+                <td class="px-[20px] py-[15px] text-[14px] align-middle">{{ $index + 1 }}</td>
+                <td class="px-[20px] py-[15px] align-middle">
+                    @if($potensi->gambar)
+                        <img src="{{ asset('storage/' . $potensi->gambar) }}" alt="{{ $potensi->judul }}" class="w-[60px] h-[40px] object-cover rounded-[6px]">
+                    @else
+                        <div class="w-[60px] h-[40px] bg-[#E2E8F0] rounded-[6px] flex items-center justify-center text-[10px] text-[#94A3B8]">
+                            No Img
+                        </div>
+                    @endif
                 </td>
-                <td>UMKM</td>
-                <td><span class="status publish">Publish</span></td>
-                <td class="action">
-                    <a href="#" class="edit">Edit</a>
-                    <a href="#" class="delete">Hapus</a>
+                <td class="px-[20px] py-[15px] align-middle">
+                    <strong class="text-text-main text-[15px] font-bold">{{ $potensi->judul }}</strong><br>
+                    <span class="text-[12px] text-text-muted mt-[2px] inline-block">Pengelola: {{ $potensi->pengelola ?? '-' }}</span>
+                </td>
+                <td class="px-[20px] py-[15px] text-[14px] align-middle">{{ $potensi->kategori }}</td>
+                <td class="px-[20px] py-[15px] align-middle">
+                    <span class="px-[10px] py-[5px] rounded-full text-[12px] font-semibold inline-block {{ $potensi->status_publikasi == 'publish' ? 'bg-[#DCFCE7] text-[#16A34A]' : 'bg-[#F1F5F9] text-[#64748B]' }}">
+                        {{ ucfirst($potensi->status_publikasi) }}
+                    </span>
+                </td>
+                <td class="px-[20px] py-[15px] align-middle">
+                    <a href="{{ route('admin.potensi.edit', $potensi->id) }}" class="mr-[15px] text-[#0284C7] no-underline font-semibold text-[13px] hover:underline">
+                        Edit
+                    </a>
+
+                    <form action="{{ route('admin.potensi.destroy', $potensi->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Yakin ingin menghapus data ini?');">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="text-[#EF4444] cursor-pointer border-none bg-transparent p-0 font-sans font-semibold text-[13px] hover:underline">
+                            Hapus
+                        </button>
+                    </form>
                 </td>
             </tr>
-
-            <!-- DATA DUMMY 2 -->
+            @empty
             <tr>
-                <td>2</td>
-                <td><div class="img">IMG</div></td>
-                <td>
-                    <strong>Hasil Pertanian Desa</strong><br>
-                    <small style="color:#94a3b8;">Pengelola: Kelompok Tani</small>
-                </td>
-                <td>Pertanian</td>
-                <td><span class="status draft">Draft</span></td>
-                <td class="action">
-                    <a href="#" class="edit">Edit</a>
-                    <a href="#" class="delete">Hapus</a>
-                </td>
+                <td colspan="6" class="text-center p-[30px] text-text-muted text-[14px]">Belum ada data potensi desa.</td>
             </tr>
-
+            @endforelse
         </tbody>
     </table>
 </div>

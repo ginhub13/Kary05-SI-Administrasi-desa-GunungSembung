@@ -21,7 +21,12 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-
+            $sessionData = [
+            'email' => Auth::user()->email,
+            'name' => Auth::user()->name,
+            ];
+            $request->session()->put($sessionData);
+            
             return redirect()->intended('admin/dashboard');
         }
 
