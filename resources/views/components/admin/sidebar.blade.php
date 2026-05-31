@@ -17,14 +17,42 @@
         </li>
 
         <li>
-            <a href="#" class="flex items-center p-[12px_20px] no-underline font-medium text-[14px] transition-all duration-200 border-l-[3px] {{ request()->is('admin/penduduk*') ? 'bg-[#14B8A61A] text-primary-light !border-primary-light' : 'text-[#CBD5E1] border-transparent hover:bg-sidebar-hover hover:text-white' }}">
-                <span class="w-[24px] mr-[10px] text-[18px] text-center">👥</span> Data Penduduk
+            <a href="{{ route('admin.profil.index') }}" class="flex items-center p-[12px_20px] no-underline font-medium text-[14px] transition-all duration-200 border-l-[3px] {{ request()->is('admin/profil-desa*') ? 'bg-[#14B8A61A] text-primary-light !border-primary-light' : 'text-[#CBD5E1] border-transparent hover:bg-sidebar-hover hover:text-white' }}">
+                <span class="w-[24px] mr-[10px] text-[18px] text-center">📝</span> Profil & Data Desa
+            </a>
+        </li>
+
+        <li>
+            <a href="#" class="flex items-center p-[12px_20px] no-underline font-medium text-[14px] transition-all duration-200 border-l-[3px] {{ request()->is('admin/pembangunan*') ? 'bg-[#14B8A61A] text-primary-light !border-primary-light' : 'text-[#CBD5E1] border-transparent hover:bg-sidebar-hover hover:text-white' }}">
+                <span class="w-[24px] mr-[10px] text-[18px] text-center">🏗️</span> Pembangunan
             </a>
         </li>
 
         <li>
             <a href="{{ route('admin.potensi.index') }}" class="flex items-center p-[12px_20px] no-underline font-medium text-[14px] transition-all duration-200 border-l-[3px] {{ request()->is('admin/potensi*') ? 'bg-[#14B8A61A] text-primary-light !border-primary-light' : 'text-[#CBD5E1] border-transparent hover:bg-sidebar-hover hover:text-white' }}">
                 <span class="w-[24px] mr-[10px] text-[18px] text-center">🌱</span> Potensi Desa
+            </a>
+        </li>
+        <li>
+            <a href="#" class="flex items-center p-[12px_20px] no-underline font-medium text-[14px] transition-all duration-200 border-l-[3px] {{ request()->is('admin/keuangan*') ? 'bg-[#14B8A61A] text-primary-light !border-primary-light' : 'text-[#CBD5E1] border-transparent hover:bg-sidebar-hover hover:text-white' }}">
+                <span class="w-[24px] mr-[10px] text-[18px] text-center">💰</span> Keuangan Desa
+            </a>
+        </li>
+
+        <li>
+            <a href="#" class="flex items-center p-[12px_20px] no-underline font-medium text-[14px] transition-all duration-200 border-l-[3px] {{ request()->is('admin/berita*') ? 'bg-[#14B8A61A] text-primary-light !border-primary-light' : 'text-[#CBD5E1] border-transparent hover:bg-sidebar-hover hover:text-white' }}">
+                <span class="w-[24px] mr-[10px] text-[18px] text-center">📰</span> Berita & Pengumuman
+            </a>
+        </li>
+        <li>
+            <a href="#" class="flex items-center p-[12px_20px] no-underline font-medium text-[14px] transition-all duration-200 border-l-[3px] {{ request()->is('admin/pemerintahan*') ? 'bg-[#14B8A61A] text-primary-light !border-primary-light' : 'text-[#CBD5E1] border-transparent hover:bg-sidebar-hover hover:text-white' }}">
+                <span class="w-[24px] mr-[10px] text-[18px] text-center">🏛️</span> Lap. Pemerintahan
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ route('admin.aspirasi.index') }}" class="flex items-center p-[12px_20px] no-underline font-medium text-[14px] transition-all duration-200 border-l-[3px] {{ request()->is('admin/aspirasi*') ? 'bg-[#14B8A61A] text-primary-light !border-primary-light' : 'text-[#CBD5E1] border-transparent hover:bg-sidebar-hover hover:text-white' }}">
+                <span class="w-[24px] mr-[10px] text-[18px] text-center">💬</span> Aspirasi Warga
             </a>
         </li>
     </ul>

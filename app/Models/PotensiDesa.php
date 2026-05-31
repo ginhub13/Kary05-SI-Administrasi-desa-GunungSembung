@@ -14,28 +14,13 @@ class PotensiDesa extends Model
     protected $fillable = [
         'judul',
         'slug',
-        'kategori',
         'gambar',
         'deskripsi_singkat',
-        'deskripsi_lengkap',
-        'harga',
-        'kondisi',
-        'status_stok',
-        'pengelola',
-        'nomor_wa',
-        'status_publikasi',
+        'status_publikasi', // Ditambahkan kembali
     ];
-
-    /**
-     * Scope untuk hanya menampilkan data yang berstatus 'publish' di halaman pengunjung
-     */
-    public function scopePublished($query)
-    {
-        return $query->where('status_publikasi', 'publish');
-    }
 
     public function getAllPotensiDesa()
     {
-        return $this->published()->orderBy('created_at', 'desc')->get();
+        return $this->orderBy('created_at', 'desc')->get();
     }
 }

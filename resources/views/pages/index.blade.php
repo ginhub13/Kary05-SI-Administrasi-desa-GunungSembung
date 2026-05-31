@@ -24,25 +24,25 @@
 <section id="about" class="container mx-auto px-5 max-w-6xl py-20 flex flex-col md:flex-row gap-12 items-center">
     <div class="flex-1">
         <h2 class="text-primary text-3xl md:text-4xl font-bold mt-0 mb-4">Profil Wilayah</h2>
-        <p class="text-base text-text-muted mb-4">
-            Meskipun memiliki kata "Gunung" pada namanya, Desa Gunung Sembung sejatinya berada di topografi dataran rendah dengan ketinggian rata-rata 25 meter di atas permukaan laut (mdpl). Mayoritas lahan desa dimanfaatkan secara produktif untuk area persawahan dan pemukiman warga.
-        </p>
-        <p class="text-base text-text-muted mb-4">
-            Secara demografi dan ekonomi, desa kami memiliki letak yang <strong>sangat strategis</strong> karena diapit oleh pusat Kecamatan Pagaden dan pusat Kabupaten Subang (berjarak ± 7,5 KM). Hal ini membuka akses ekonomi dan distribusi hasil pertanian warga dengan sangat baik.
+        
+        <p class="text-base text-text-muted mb-4 whitespace-pre-line text-justify">
+            {{ $profil->deskripsi_demografi ?? 'Informasi profil wilayah desa sedang dalam tahap pembaruan oleh pemerintah desa.' }}
         </p>
 
         <div class="flex flex-col sm:flex-row gap-5 mt-[30px]">
             <div class="bg-bg-color p-[15px] rounded-lg border-l-4 border-primary flex-1">
-                <h4 class="m-0 mb-1 text-[20px] text-primary font-bold">4 Dusun</h4>
-                <p class="m-0 text-[13px] text-text-muted">Terbagi dalam 9 RW dan 24 RT.</p>
+                <h4 class="m-0 mb-1 text-[20px] text-primary font-bold">{{ $profil->jumlah_dusun ?? '0' }} Dusun</h4>
+                <p class="m-0 text-[13px] text-text-muted">Terbagi dalam {{ $profil->jumlah_rw ?? '0' }} RW dan {{ $profil->jumlah_rt ?? '0' }} RT.</p>
             </div>
+            
             <div class="bg-bg-color p-[15px] rounded-lg border-l-4 border-primary flex-1">
-                <h4 class="m-0 mb-1 text-[20px] text-primary font-bold">± 5.400</h4>
+                <h4 class="m-0 mb-1 text-[20px] text-primary font-bold">± {{ number_format($profil->total_penduduk ?? 0, 0, ',', '.') }}</h4>
                 <p class="m-0 text-[13px] text-text-muted">Total populasi jiwa penduduk.</p>
             </div>
+            
             <div class="bg-bg-color p-[15px] rounded-lg border-l-4 border-primary flex-1">
-                <h4 class="m-0 mb-1 text-[20px] text-primary font-bold">Agribisnis</h4>
-                <p class="m-0 text-[13px] text-text-muted">Sektor ekonomi utama warga.</p>
+                <h4 class="m-0 mb-1 text-[20px] text-primary font-bold">{{ str_replace('.', ',', $profil->luas_wilayah ?? 0) }} Ha</h4>
+                <p class="m-0 text-[13px] text-text-muted">Luas total wilayah desa.</p>
             </div>
         </div>
     </div>
@@ -70,7 +70,6 @@
                 @endif
 
                 <div class="p-[25px] flex-grow">
-                    <span class="text-[11px] font-bold text-primary-light uppercase">{{ $potensi->kategori }}</span>
                     <h3 class="m-0 mt-1.5 mb-2.5 text-primary text-[20px] font-bold">{{ $potensi->judul }}</h3>
                     <p class="text-text-muted m-0 text-[14px]">
                         {{ Str::limit($potensi->deskripsi_singkat, 90) }}
@@ -83,12 +82,6 @@
             </div>
             @endforelse
 
-        </div>
-
-        <div class="text-center mt-10">
-            <a href="{{ route('potensi-desa') }}" class="inline-block bg-primary text-white px-[30px] py-[12px] rounded-full font-bold transition duration-300 hover:bg-teal-800">
-                Lihat Detail Potensi & BUMDes
-            </a>
         </div>
     </div>
 </section>
