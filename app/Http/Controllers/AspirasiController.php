@@ -67,6 +67,9 @@ public function updateStatus(Request $request, $id)
         'status' => 'required|in:Menunggu,Diproses,Selesai,Ditolak'
     ]);
 
+    $aspirasi->status = $request->status;
+    $aspirasi->save();
+
     return redirect()->back()->with('success', 'Status berhasil diperbarui.');
 }
 
