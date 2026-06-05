@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Aspirasi;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
-class AspirasiController extends Controller
+
+class AdminAspirasiController extends Controller
 {
     public function index(\Illuminate\Http\Request $request)
     {

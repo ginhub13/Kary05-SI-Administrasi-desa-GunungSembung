@@ -1,11 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Publik;
 
 use App\Http\Controllers\Controller;
-use App\Models\HakMasyarakat;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class HakMasyarakatController extends Controller
 {

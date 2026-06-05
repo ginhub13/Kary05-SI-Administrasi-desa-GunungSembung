@@ -29,13 +29,8 @@
                 <div class="absolute left-0 top-full w-[240px] bg-white border border-border rounded-[8px] shadow-lg opacity-0 invisible translate-y-2 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-300 z-50 overflow-hidden">
                     <ul class="flex flex-col m-0 p-0 list-none">
                         <li>
-                            <a href="#" class="flex items-center gap-[10px] px-[20px] py-[12px] text-[14px] text-text-main no-underline border-b border-border hover:text-primary hover:bg-primary-light/5 transition-colors {{ request()->is('berita*') ? 'text-primary bg-primary-light/5' : '' }}">
+                            <a href="{{ route('publik.berita.index') }}" class="flex items-center gap-[10px] px-[20px] py-[12px] text-[14px] text-text-main no-underline border-b border-border hover:text-primary hover:bg-primary-light/5 transition-colors {{ request()->is('berita*') ? 'text-primary bg-primary-light/5' : '' }}">
                                 <span class="text-[16px]">📰</span> Kabar Berita
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="flex items-center gap-[10px] px-[20px] py-[12px] text-[14px] text-text-main no-underline border-b border-border hover:text-primary hover:bg-primary-light/5 transition-colors {{ request()->is('pengumuman*') ? 'text-primary bg-primary-light/5' : '' }}">
-                                <span class="text-[16px]">📢</span> Pengumuman Desa
                             </a>
                         </li>
                         <li>

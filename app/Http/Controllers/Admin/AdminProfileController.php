@@ -1,15 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\ProfilDesa;
-use App\Models\Dokumen;
 use App\Models\FasilitasPublik;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 
-class ProfilDesaController extends Controller
+class AdminProfileController extends Controller
 {
     public function index()
     {

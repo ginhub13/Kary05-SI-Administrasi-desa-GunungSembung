@@ -1,26 +1,37 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminAspirasiController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\PotensiController;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\HakMasyarakatController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\AdminProfileController;
+use App\Http\Controllers\Admin\AdminPotensiController;
+use App\Http\Controllers\Admin\AdminKabarBeritaController;
+use App\Http\Controllers\Publik\PublikProfileController;
+use App\Http\Controllers\Publik\HakMasyarakatController;
+use App\Http\Controllers\Publik\PublikAspirasiController;
+use App\Http\Controllers\Publik\PublikKontakController;
+use App\Http\Controllers\Publik\PublikPotensiDesaController;
+use App\Http\Controllers\Publik\PublikKabarBeritaController;
 
 // ================= ROUTE PUBLIK (PENGUNJUNG) =================
-Route::get('/', [ProfileController::class, 'index'])->name('profile');
-Route::get('/profile', [ProfileController::class, 'profile'])->name('profile.detail');
-Route::get('/potensi-desa', [ProfileController::class, 'potensiDesa'])->name('potensi-desa');
-Route::get('/potensi/{slug}', [ProfileController::class, 'showPotensi'])->name('potensi.show');
-Route::get('/kontak', [ProfileController::class, 'kontak'])->name('kontak');
+Route::get('/', [PublikProfileController::class, 'index'])->name('profile');
+Route::get('/profile', [PublikProfileController::class, 'profile'])->name('profile.detail');
+Route::get('/potensi-desa', [PublikPotensiDesaController::class, 'potensiDesa'])->name('potensi-desa');
+Route::get('/kontak', [PublikKontakController::class, 'kontak'])->name('kontak');
 
 
 // Route Hak Masyarakat & Informasi Layanan (Pure Publikasi)
 Route::get('/hak-masyarakat', [HakMasyarakatController::class, 'index'])->name('publik.hak-masyarakat');
 
 // Route Aspirasi Masyarakat
-Route::get('/aspirasi', [App\Http\Controllers\ProfileController::class, 'aspirasi'])->name('publik.aspirasi');
-Route::post('/aspirasi', [App\Http\Controllers\ProfileController::class, 'kirimAspirasi'])->name('publik.aspirasi.kirim');
+Route::get('/aspirasi', [PublikAspirasiController::class, 'aspirasi'])->name('publik.aspirasi');
+Route::post('/aspirasi', [PublikAspirasiController::class, 'kirimAspirasi'])->name('publik.aspirasi.kirim');
+
+// Route Berita
+Route::get('/berita', [PublikKabarBeritaController::class, 'indexBerita'])->name('publik.berita.index');
+Route::get('/berita/{slug}', [PublikKabarBeritaController::class, 'showBerita'])->name('publik.berita.show');
+
 
 
 // ================= ROUTE ADMIN (DASHBOARD) =================
@@ -32,26 +43,26 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::middleware(['auth'])->group(function () {
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
+        
+        // Route admin dasboard
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-        Route::group(['prefix' => 'potensi', 'as' => 'potensi.'], function () {
-            Route::get('/', [PotensiController::class, 'index'])->name('index');
-            Route::get('/create', [PotensiController::class, 'create'])->name('create');
-            Route::post('/', [PotensiController::class, 'store'])->name('store');
-            Route::get('/{id}/edit', [PotensiController::class, 'edit'])->name('edit');
-            Route::put('/{id}', [PotensiController::class, 'update'])->name('update');
-            Route::delete('/{id}', [PotensiController::class, 'destroy'])->name('destroy');
-        });
+        
+        // Route kelola potensi
+        Route::resource('potensi', AdminPotensiController::class);
+
+        // Kelola BeritadanPengumuman
+        Route::resource('berita', AdminKabarBeritaController::class)->except(['show']);
+
+
         // Route Kelola Profil Desa & Fasilitas Publik
-        Route::get('/profil-desa', [App\Http\Controllers\ProfilDesaController::class, 'index'])->name('profil.index');
-        Route::post('/profil-desa', [App\Http\Controllers\ProfilDesaController::class, 'updateProfil'])->name('profil.update');
-        Route::post('/fasilitas-publik', [App\Http\Controllers\ProfilDesaController::class, 'storeFasilitas'])->name('fasilitas.store');
-        Route::delete('/fasilitas-publik/{id}', [App\Http\Controllers\ProfilDesaController::class, 'destroyFasilitas'])->name('fasilitas.destroy');
+        Route::get('/profil-desa', [AdminProfileController::class, 'index'])->name('profil.index');
+        Route::post('/profil-desa', [AdminProfileController::class, 'updateProfil'])->name('profil.update');
+        Route::post('/fasilitas-publik', [AdminProfileController::class, 'storeFasilitas'])->name('fasilitas.store');
+        Route::delete('/fasilitas-publik/{id}', [AdminProfileController::class, 'destroyFasilitas'])->name('fasilitas.destroy');
 
         // Route Kelola Aspirasi Masyarakat
-        Route::get('/aspirasi', [App\Http\Controllers\AspirasiController::class, 'index'])->name('aspirasi.index');
-        Route::put('/aspirasi/{id}', [App\Http\Controllers\AspirasiController::class, 'updateStatus'])->name('aspirasi.update');
-        Route::delete('/aspirasi/{id}', [App\Http\Controllers\AspirasiController::class, 'destroy'])->name('aspirasi.destroy');   
-
-
+        Route::get('/aspirasi', [AdminAspirasiController::class, 'index'])->name('aspirasi.index');
+        Route::put('/aspirasi/{id}', [AdminAspirasiController::class, 'updateStatus'])->name('aspirasi.update');
+        Route::delete('/aspirasi/{id}', [AdminAspirasiController::class, 'destroy'])->name('aspirasi.destroy');
     });
 });
