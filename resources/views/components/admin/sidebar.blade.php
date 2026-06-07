@@ -28,11 +28,7 @@
             </a>
         </li>
 
-        <li>
-            <a href="{{ route('admin.potensi.index') }}" class="flex items-center p-[12px_20px] no-underline font-medium text-[14px] transition-all duration-200 border-l-[3px] {{ request()->is('admin/potensi*') ? 'bg-[#14B8A61A] text-primary-light !border-primary-light' : 'text-[#CBD5E1] border-transparent hover:bg-sidebar-hover hover:text-white' }}">
-                <span class="w-[24px] mr-[10px] text-[18px] text-center">🌱</span> Potensi Desa
-            </a>
-        </li>
+
         <li>
             <a href="#" class="flex items-center p-[12px_20px] no-underline font-medium text-[14px] transition-all duration-200 border-l-[3px] {{ request()->is('admin/keuangan*') ? 'bg-[#14B8A61A] text-primary-light !border-primary-light' : 'text-[#CBD5E1] border-transparent hover:bg-sidebar-hover hover:text-white' }}">
                 <span class="w-[24px] mr-[10px] text-[18px] text-center">💰</span> Keuangan Desa

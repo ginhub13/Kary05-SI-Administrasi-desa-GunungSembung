@@ -47,8 +47,15 @@ Route::middleware(['auth'])->group(function () {
         // Route admin dasboard
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
         
-        // Route kelola potensi
-        Route::resource('potensi', AdminPotensiController::class);
+
+        // Route kelola potensi – manual, mengarah ke AdminProfileController
+        Route::prefix('potensi')->name('potensi.')->middleware(['web', 'auth'])->group(function () {
+            Route::get('/create', [AdminProfileController::class, 'createPotensi'])->name('create');
+            Route::post('/', [AdminProfileController::class, 'storePotensi'])->name('store');
+            Route::get('/{id}/edit', [AdminProfileController::class, 'editPotensi'])->name('edit');
+            Route::put('/{id}', [AdminProfileController::class, 'updatePotensi'])->name('update');
+            Route::delete('/{id}', [AdminProfileController::class, 'destroyPotensi'])->name('destroy');
+        });
 
         // Kelola BeritadanPengumuman
         Route::resource('berita', AdminKabarBeritaController::class)->except(['show']);

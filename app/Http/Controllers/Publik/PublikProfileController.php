@@ -11,7 +11,7 @@ class PublikProfileController extends Controller
         // 1. Ambil Data Potensi Desa (Maksimal 3 untuk Landing Page)
         $modelPotensi = new \App\Models\PotensiDesa();
         // Karena status_publikasi dikembalikan, pastikan hanya memanggil yang berstatus 'publish' (jika Anda sudah membuat scope atau query where)
-        $dataPotensi = $modelPotensi->where('status_publikasi', 'publish')->latest()->limit(3)->get();
+        $dataPotensi = $modelPotensi->where('status_publikasi', 'publish')->latest()->get();
 
         // 2. Ambil Data Profil Desa untuk Section About
         $profil = \App\Models\ProfilDesa::first();
