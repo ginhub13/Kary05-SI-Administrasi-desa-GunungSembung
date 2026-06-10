@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\ProfilDesa;
 use App\Models\FasilitasPublik;
-use App\Models\PotensiDesa;           // <-- tambahkan import model potensi
+use App\Models\PotensiDesa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
@@ -20,7 +20,7 @@ class AdminProfileController extends Controller
     {
         $profil = ProfilDesa::first() ?? new ProfilDesa();
         $fasilitas = FasilitasPublik::latest()->get();
-        $potensis = PotensiDesa::latest()->get();   // data potensi untuk tab 🌾
+        $potensis = PotensiDesa::latest()->get();
 
         return view('admin.profil.index', compact('profil', 'fasilitas', 'potensis'));
     }
@@ -31,16 +31,13 @@ class AdminProfileController extends Controller
     public function updateProfil(Request $request)
     {
         $formId = $request->input('form_id');
-        
-        // 1. Cek validitas form_id di awal untuk mencegah form tidak dikenali
-        if (!in_array($formId, ['demografi', 'sejarah', 'aparatur', 'peta'])) {
-            return redirect()->back()->with('error', 'Terjadi kesalahan sistem, form tidak valid.');
+
+        if (!in_array($formId, ['demografi', 'sejarah', 'aparatur'])) {
+            return redirect()->back()->with('error', 'Form tidak valid.');
         }
 
-        // 2. Ambil data profil hanya 1 kali di sini
         $profil = ProfilDesa::first() ?? new ProfilDesa();
 
-        // 4. JIKA FORM LAINNYA (Demografi, Sejarah, Aparatur) - Satukan Aturan Validasi ke $rules
         $rules = [];
         if ($formId === 'demografi') {
             $rules = [
@@ -73,19 +70,20 @@ class AdminProfileController extends Controller
             ];
         }
 
-        // Eksekusi validasi secara terpusat
         $validated = $request->validate($rules);
 
-        // Jika yang disubmit adalah demografi, tambahkan hitungan total_penduduk ke array $validated
         if ($formId === 'demografi') {
             $validated['total_penduduk'] = $validated['penduduk_laki_laki'] + $validated['penduduk_perempuan'];
         }
 
-        // Tulis data ke database
         $profil->fill($validated);
         $profil->save();
 
-        return redirect()->back()->with('success', 'Data ' . ucfirst($formId) . ' berhasil diperbarui!');
+        $activeTab = $formId; // demografi, sejarah, atau aparatur
+
+        return redirect()->back()
+            ->with('success', 'Data ' . ucfirst($formId) . ' berhasil diperbarui!')
+            ->with('active_tab', $activeTab);
     }
 
     /**
@@ -95,29 +93,71 @@ class AdminProfileController extends Controller
     {
         $validated = $request->validate([
             'nama_fasilitas' => 'required|string|max:255',
-            'lokasi' => 'required|string|max:255',
-            'deskripsi' => 'required|string',
+            'lokasi'         => 'required|string|max:255',
+            'deskripsi'      => 'required|string',
         ]);
 
         FasilitasPublik::create($validated);
-        return redirect()->back()->with('success', 'Fasilitas publik berhasil ditambahkan.');
+        return redirect()->route('admin.profil.index')
+            ->with('success', 'Fasilitas publik berhasil ditambahkan.')
+            ->with('active_tab', 'fasilitas');
     }
 
     /**
-     * Hapus Item Fasilitas Publik
+     * Menampilkan form untuk mengedit data fasilitas publik. (tidak digunakan dengan modal)
+     */
+    public function editFasilitas($id)
+    {
+        $fasilitas = FasilitasPublik::findOrFail($id);
+        return view('admin.fasilitas.edit', compact('fasilitas'));
+    }
+
+    /**
+     * Memvalidasi dan memperbarui data fasilitas publik di database.
+     */
+    public function updateFasilitas(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'nama_fasilitas' => 'required|string|max:255',
+            'lokasi'         => 'required|string|max:255',
+            'deskripsi'      => 'required|string',
+        ], [
+            'required' => ':attribute wajib diisi.',
+        ]);
+
+        $fasilitas = FasilitasPublik::findOrFail($id);
+
+        try {
+            $fasilitas->update($validated);
+            return redirect()->route('admin.profil.index')
+                ->with('success', 'Fasilitas publik berhasil diperbarui.')
+                ->with('active_tab', 'fasilitas');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Terjadi kesalahan sistem: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Menghapus item fasilitas publik dari database.
      */
     public function destroyFasilitas($id)
     {
-        $f = FasilitasPublik::findOrFail($id);
-        $f->delete();
+        $fasilitas = FasilitasPublik::findOrFail($id);
 
-        return redirect()->back()->with('success', 'Fasilitas publik berhasil dihapus.');
+        try {
+            $fasilitas->delete();
+            return redirect()->back()
+                ->with('success', 'Fasilitas publik berhasil dihapus.')
+                ->with('active_tab', 'fasilitas');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Gagal menghapus fasilitas: ' . $e->getMessage());
+        }
     }
 
-
-    // ####################################################################
     // ==================== BAGIAN POTENSI DESA ====================
-    // ####################################################################
 
     /**
      * Menampilkan form untuk menambah potensi desa baru.
@@ -132,19 +172,17 @@ class AdminProfileController extends Controller
      */
     public function storePotensi(Request $request)
     {
-        // Validasi input, memastikan 'judul' unik di tabel 'potensi_desa'
         $request->validate([
             'judul'             => 'required|string|max:255|unique:potensi_desa,judul',
             'gambar'            => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'deskripsi_singkat' => 'required|string|max:500',
             'status_publikasi'  => 'required|in:publish,draft',
         ], [
-            'judul.unique'      => 'Judul potensi ini sudah digunakan, silakan gunakan judul lain.'
+            'judul.unique' => 'Judul potensi ini sudah digunakan, silakan gunakan judul lain.'
         ]);
 
-        // Menyimpan file gambar ke storage public
         $path = $request->file('gambar')->store('upload/images', 'public');
-        
+
         $data = [
             'judul'             => $request->judul,
             'slug'              => Str::slug($request->judul),
@@ -153,9 +191,10 @@ class AdminProfileController extends Controller
             'status_publikasi'  => $request->status_publikasi,
         ];
 
-        // Eksekusi simpan ke database
         if (PotensiDesa::create($data)) {
-            return redirect()->route('admin.profil.index')->with('success', 'Data potensi berhasil disimpan.');
+            return redirect()->route('admin.profil.index')
+                ->with('success', 'Data potensi berhasil disimpan.')
+                ->with('active_tab', 'potensi');
         }
 
         return redirect()->back()->with('error', 'Gagal menyimpan data potensi.');
@@ -175,14 +214,13 @@ class AdminProfileController extends Controller
      */
     public function updatePotensi(Request $request, $id)
     {
-        // Validasi input, pengecualian 'unique' untuk ID yang sedang diupdate agar tidak bentrok
         $request->validate([
             'judul'             => 'required|string|max:255|unique:potensi_desa,judul,' . $id,
             'gambar'            => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'deskripsi_singkat' => 'required|string|max:500',
             'status_publikasi'  => 'required|in:publish,draft',
         ], [
-            'judul.unique'      => 'Judul potensi ini sudah digunakan oleh data lain.'
+            'judul.unique' => 'Judul potensi ini sudah digunakan oleh data lain.'
         ]);
 
         $potensi = PotensiDesa::findOrFail($id);
@@ -194,20 +232,18 @@ class AdminProfileController extends Controller
             'status_publikasi'  => $request->status_publikasi,
         ];
 
-        // Proses penggantian gambar jika user mengunggah file baru
         if ($request->hasFile('gambar')) {
-            // Hapus file lama dari storage jika ada
             if ($potensi->gambar && Storage::disk('public')->exists($potensi->gambar)) {
                 Storage::disk('public')->delete($potensi->gambar);
             }
-
             $path = $request->file('gambar')->store('upload/images', 'public');
             $dataUpdate['gambar'] = $path;
         }
 
-        // Eksekusi pembaruan data ke database
         if ($potensi->update($dataUpdate)) {
-            return redirect()->route('admin.profil.index')->with('success', 'Data potensi berhasil diperbarui.');
+            return redirect()->route('admin.profil.index')
+                ->with('success', 'Data potensi berhasil diperbarui.')
+                ->with('active_tab', 'potensi');
         }
 
         return redirect()->back()->with('error', 'Gagal memperbarui data potensi.');
@@ -220,17 +256,17 @@ class AdminProfileController extends Controller
     {
         $potensi = PotensiDesa::findOrFail($id);
 
-        // Hapus file gambar terkait dari storage
         if ($potensi->gambar && Storage::disk('public')->exists($potensi->gambar)) {
             Storage::disk('public')->delete($potensi->gambar);
         }
 
-        // Eksekusi penghapusan record dari database
         if ($potensi->delete()) {
-            return redirect()->route('admin.profil.index')->with('success', 'Data potensi berhasil dihapus.');
+            return redirect()->route('admin.profil.index')
+                ->with('success', 'Data potensi berhasil dihapus.')
+                ->with('active_tab', 'potensi');
         }
 
-        return redirect()->route('admin.profil.index')->with('error', 'Gagal menghapus data potensi.');
+        return redirect()->route('admin.profil.index')
+            ->with('error', 'Gagal menghapus data potensi.');
     }
-
 }

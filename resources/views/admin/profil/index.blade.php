@@ -31,7 +31,6 @@
 
     {{-- ================== TAB DEMOGRAFI ================== --}}
     <div id="form-section-demografi" class="tab-content block">
-        {{-- ... (form demografi tidak berubah) ... --}}
         <form action="{{ route('admin.profil.update') }}" method="POST" class="bg-white rounded-[12px] border border-border p-[30px] shadow-sm flex flex-col gap-[20px]">
             @csrf
             <input type="hidden" name="form_id" value="demografi">
@@ -40,8 +39,8 @@
             <div class="grid grid-cols-1 md:grid-cols-4 gap-[20px]">
                 <div>
                     <label class="block text-[12px] font-bold mb-[6px] uppercase text-text-main">Total Penduduk (Jiwa)</label>
-                    <input type="number" id="total_penduduk" name="total_penduduk" value="{{ old('total_penduduk', $profil->total_penduduk) }}" class="w-full bg-gray-100 border p-[10px] rounded-md text-[14px] font-bold text-primary cursor-not-allowed " readonly>
-                    <span class="block text-[11px] text-text-muted mb-[4px]">Jumlah total penduduk tidak perlu diisi manual, karena akan dihitung otomatis berdasarkan jumlah penduduk laki-laki dan perempuan.</span>
+                    <input type="number" id="total_penduduk" name="total_penduduk" value="{{ old('total_penduduk', $profil->total_penduduk) }}" class="w-full bg-gray-100 border p-[10px] rounded-md text-[14px] font-bold text-primary cursor-not-allowed" readonly>
+                    <span class="block text-[11px] text-text-muted mb-[4px]">Dihitung otomatis dari jumlah laki-laki & perempuan.</span>
                     @error('total_penduduk')<span class="text-red-500 text-[11px]">{{ $message }}</span>@enderror
                 </div>
                 <div>
@@ -107,7 +106,6 @@
 
     {{-- ================== TAB SEJARAH ================== --}}
     <div id="form-section-sejarah" class="tab-content hidden">
-        {{-- ... (form sejarah tidak berubah) ... --}}
         <form action="{{ route('admin.profil.update') }}" method="POST" class="bg-white rounded-[12px] border border-border p-[30px] shadow-sm flex flex-col gap-[20px]">
             @csrf
             <input type="hidden" name="form_id" value="sejarah">
@@ -145,7 +143,6 @@
 
     {{-- ================== TAB APARATUR ================== --}}
     <div id="form-section-aparatur" class="tab-content hidden">
-        {{-- ... (form aparatur tidak berubah) ... --}}
         <form action="{{ route('admin.profil.update') }}" method="POST" class="bg-white rounded-[12px] border border-border p-[30px] shadow-sm flex flex-col gap-[20px]">
             @csrf
             <input type="hidden" name="form_id" value="aparatur">
@@ -184,7 +181,7 @@
 
     {{-- ================== TAB FASILITAS ================== --}}
     <div id="form-section-fasilitas" class="tab-content hidden flex flex-col gap-[20px]">
-        {{-- ... (form fasilitas tidak berubah) ... --}}
+        {{-- Form Tambah Fasilitas --}}
         <div class="bg-white rounded-[12px] border border-border p-[30px] shadow-sm">
             <h3 class="text-[16px] font-bold text-text-main border-b pb-[8px] m-0 mb-[15px]">Tambah Fasilitas Publik</h3>
             <form action="{{ route('admin.fasilitas.store') }}" method="POST" class="grid grid-cols-1 md:grid-cols-3 gap-[20px] items-end">
@@ -207,6 +204,7 @@
             </form>
         </div>
 
+        {{-- Tabel Daftar Fasilitas --}}
         <div class="bg-white rounded-[12px] border border-border overflow-hidden shadow-sm">
             <table class="w-full text-left border-collapse">
                 <thead>
@@ -222,10 +220,17 @@
                         <td class="p-[15px_20px] font-bold">{{ $f->nama_fasilitas }}</td>
                         <td class="p-[15px_20px] text-text-muted">{{ $f->lokasi }}</td>
                         <td class="p-[15px_20px] text-center">
-                            <form action="{{ route('admin.fasilitas.destroy', $f->id) }}" method="POST">
-                                @csrf @method('DELETE')
-                                <button type="submit" class="text-red-500 font-bold bg-transparent border-0 cursor-pointer">Hapus</button>
-                            </form>
+                            <div class="flex items-center justify-center gap-[10px]">
+                                {{-- Tombol Edit --}}
+                                <button type="button" onclick="openEditFasilitasModal({{ $f->id }}, '{{ addslashes($f->nama_fasilitas) }}', '{{ addslashes($f->lokasi) }}', '{{ addslashes($f->deskripsi) }}')" class="text-[#0284C7] font-semibold text-[13px] bg-transparent border-none cursor-pointer hover:underline">
+                                    Edit
+                                </button>
+                                {{-- Tombol Hapus --}}
+                                <form action="{{ route('admin.fasilitas.destroy', $f->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus fasilitas ini?');">
+                                    @csrf @method('DELETE')
+                                    <button type="submit" class="text-red-500 font-bold bg-transparent border-0 cursor-pointer hover:underline">Hapus</button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                     @empty
@@ -233,6 +238,36 @@
                     @endforelse
                 </tbody>
             </table>
+        </div>
+
+        {{-- Modal Edit Fasilitas --}}
+        <div id="edit-fasilitas-modal" class="fixed inset-0 z-50 hidden bg-black/50 items-center justify-center">
+            <div class="bg-white rounded-[12px] max-w-lg w-full mx-4 p-[30px] shadow-lg border border-border">
+                <div class="flex justify-between items-center mb-[20px]">
+                    <h3 class="text-[18px] font-bold text-text-main">Edit Fasilitas</h3>
+                    <button onclick="closeEditFasilitasModal()" class="text-gray-500 hover:text-gray-700 text-[20px] leading-none">&times;</button>
+                </div>
+                <form id="edit-fasilitas-form" method="POST">
+                    @csrf
+                    @method('PUT')
+                    <div class="mb-[15px]">
+                        <label class="block text-[12px] font-bold mb-[6px] uppercase text-text-main">Nama Fasilitas *</label>
+                        <input type="text" name="nama_fasilitas" id="edit-fasilitas-nama" required class="w-full bg-bg-color border p-[10px] rounded-md text-[14px]">
+                    </div>
+                    <div class="mb-[15px]">
+                        <label class="block text-[12px] font-bold mb-[6px] uppercase text-text-main">Lokasi *</label>
+                        <input type="text" name="lokasi" id="edit-fasilitas-lokasi" required class="w-full bg-bg-color border p-[10px] rounded-md text-[14px]">
+                    </div>
+                    <div class="mb-[15px]">
+                        <label class="block text-[12px] font-bold mb-[6px] uppercase text-text-main">Deskripsi *</label>
+                        <textarea name="deskripsi" id="edit-fasilitas-deskripsi" rows="3" required class="w-full bg-bg-color border p-[10px] rounded-md text-[14px]"></textarea>
+                    </div>
+                    <div class="flex gap-[15px] mt-[25px] pt-[15px] border-t justify-end">
+                        <button type="button" onclick="closeEditFasilitasModal()" class="bg-gray-200 text-gray-700 px-[25px] py-[10px] rounded-[8px] font-semibold text-[14px]">Batal</button>
+                        <button type="submit" class="bg-primary text-white px-[25px] py-[10px] rounded-[8px] font-semibold text-[14px] hover:bg-[#0F766E]">Simpan Perubahan</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 
@@ -310,7 +345,6 @@
                             </span>
                         </td>
                         <td class="px-[20px] py-[15px] align-middle">
-                            {{-- Tombol Edit memicu modal --}}
                             <button type="button" onclick="openEditModal({{ $potensi->id }}, '{{ addslashes($potensi->judul) }}', '{{ addslashes($potensi->deskripsi_singkat) }}', '{{ $potensi->status_publikasi }}', '{{ $potensi->gambar ? asset('storage/' . $potensi->gambar) : '' }}')" class="mr-[15px] text-[#0284C7] bg-transparent border-none cursor-pointer font-semibold text-[13px] hover:underline">
                                 Edit
                             </button>
@@ -332,7 +366,7 @@
             </table>
         </div>
 
-        {{-- ================== MODAL EDIT POTENSI ================== --}}
+        {{-- Modal Edit Potensi --}}
         <div id="edit-potensi-modal" class="fixed inset-0 z-50 hidden bg-black/50 flex items-center justify-center">
             <div class="bg-white rounded-[12px] max-w-2xl w-full mx-4 p-[30px] shadow-lg border border-border max-h-[90vh] overflow-y-auto">
                 <div class="flex justify-between items-center mb-[20px]">
@@ -386,21 +420,52 @@
         });
 
         const activeSection = document.getElementById(`form-section-${section}`);
-        activeSection.classList.remove('hidden');
-        if (section === 'fasilitas' || section === 'potensi') {
-            activeSection.classList.add('flex');
-        } else {
-            activeSection.classList.add('block');
+        if (activeSection) {
+            activeSection.classList.remove('hidden');
+            if (section === 'fasilitas' || section === 'potensi') {
+                activeSection.classList.add('flex');
+            } else {
+                activeSection.classList.add('block');
+            }
         }
         
-        document.getElementById(`tab-${section}`).classList.add('bg-white', 'text-primary', 'shadow-sm');
+        const activeBtn = document.getElementById(`tab-${section}`);
+        if (activeBtn) {
+            activeBtn.classList.add('bg-white', 'text-primary', 'shadow-sm');
+        }
     }
 
-    // Modal Edit
+    // --- Modal Edit Fasilitas ---
+    function openEditFasilitasModal(id, nama, lokasi, deskripsi) {
+        const modal = document.getElementById('edit-fasilitas-modal');
+        const form = document.getElementById('edit-fasilitas-form');
+        form.action = `/admin/fasilitas-publik/${id}`;
+
+        document.getElementById('edit-fasilitas-nama').value = nama;
+        document.getElementById('edit-fasilitas-lokasi').value = lokasi;
+        document.getElementById('edit-fasilitas-deskripsi').value = deskripsi;
+
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
+
+    function closeEditFasilitasModal() {
+        const modal = document.getElementById('edit-fasilitas-modal');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+
+    document.getElementById('edit-fasilitas-modal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeEditFasilitasModal();
+        }
+    });
+
+    // --- Modal Edit Potensi ---
     function openEditModal(id, judul, deskripsi, status, imageUrl) {
         const modal = document.getElementById('edit-potensi-modal');
         const form = document.getElementById('edit-potensi-form');
-        form.action = `/admin/potensi/${id}`; // route update
+        form.action = `/admin/potensi/${id}`;
         
         document.getElementById('edit-judul').value = judul;
         document.getElementById('edit-deskripsi').value = deskripsi;
@@ -423,7 +488,6 @@
         modal.classList.remove('flex');
     }
     
-    // Tutup modal jika klik di luar konten
     document.getElementById('edit-potensi-modal').addEventListener('click', function(e) {
         if (e.target === this) {
             closeEditModal();
@@ -431,13 +495,12 @@
     });
 
     document.addEventListener('DOMContentLoaded', () => {
-        // Jika ada error validasi di potensi, buka tab potensi
-        const potensiErrors = document.querySelectorAll('#form-section-potensi .text-red-500');
-        if (potensiErrors.length > 0) {
-            switchTab('potensi');
-        } else {
-            switchTab('demografi');
-        }
+        // Prioritas 1: session 'active_tab' dari controller
+        const sessionTab = @json(session('active_tab'));
+        const validTabs = ['demografi', 'sejarah', 'aparatur', 'fasilitas', 'potensi'];
+        let activeTab = 'demografi'; // default
+
+        switchTab(activeTab);
 
         // Hitung total penduduk otomatis
         const inputLaki = document.getElementById('penduduk_laki_laki');
@@ -450,7 +513,7 @@
             inputTotal.value = laki + perempuan;
         }
 
-        if (inputLaki && inputPerempuan) {
+        if (inputLaki && inputPerempuan && inputTotal) {
             inputLaki.addEventListener('input', hitungTotalPenduduk);
             inputPerempuan.addEventListener('input', hitungTotalPenduduk);
         }

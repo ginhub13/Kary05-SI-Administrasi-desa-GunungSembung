@@ -34,18 +34,18 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#" class="flex items-center gap-[10px] px-[20px] py-[12px] text-[14px] text-text-main no-underline border-b border-border hover:text-primary hover:bg-primary-light/5 transition-colors {{ request()->is('pembangunan*') ? 'text-primary bg-primary-light/5' : '' }}">
-                                <span class="text-[16px]">🏗️</span> Pembangunan Fisik
+                            <a href="{{ route('publik.pembangunan.index') }}" class="flex items-center gap-[10px] px-[20px] py-[12px] text-[14px] text-text-main no-underline border-b border-border hover:text-primary hover:bg-primary-light/5 transition-colors {{ request()->is('pembangunan*') ? 'text-primary bg-primary-light/5' : '' }}">
+                                <span class="text-[16px]">🏗️</span> Laporan Pembangunan
                             </a>
                         </li>
                         <li>
-                            <a href="#" class="flex items-center gap-[10px] px-[20px] py-[12px] text-[14px] text-text-main no-underline border-b border-border hover:text-primary hover:bg-primary-light/5 transition-colors {{ request()->is('keuangan-desa*') ? 'text-primary bg-primary-light/5' : '' }}">
-                                <span class="text-[16px]">💰</span> Keuangan APBDes
+                            <a href="{{ route('publik.keuangan.index') }}" class="flex items-center gap-[10px] px-[20px] py-[12px] text-[14px] text-text-main no-underline border-b border-border hover:text-primary hover:bg-primary-light/5 transition-colors {{ request()->is('keuangan-desa*') ? 'text-primary bg-primary-light/5' : '' }}">
+                                <span class="text-[16px]">💰</span> Laporan Keuangan
                             </a>
                         </li>
                         <li>
-                            <a href="#" class="flex items-center gap-[10px] px-[20px] py-[12px] text-[14px] text-text-main no-underline border-b border-border hover:text-primary hover:bg-primary-light/5 transition-colors {{ request()->is('laporan-pemerintahan*') ? 'text-primary bg-primary-light/5' : '' }}">
-                                <span class="text-[16px]">🏛️</span> Laporan Pemdes
+                            <a href="{{ route('publik.pemerintahan.index') }}" class="flex items-center gap-[10px] px-[20px] py-[12px] text-[14px] text-text-main no-underline border-b border-border hover:text-primary hover:bg-primary-light/5 transition-colors {{ request()->is('laporan-pemerintahan*') ? 'text-primary bg-primary-light/5' : '' }}">
+                                <span class="text-[16px]">🏛️</span> Laporan Pemerintah
                             </a>
                         </li>
                         <li>
