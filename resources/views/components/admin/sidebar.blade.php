@@ -1,6 +1,6 @@
 <aside class="w-[260px] bg-sidebar-bg text-white flex flex-col transition-all duration-300 z-10 shrink-0">
 
-    <a href="{{ url('/admin') }}" class="p-[25px_20px] text-[18px] font-bold text-white no-underline border-b border-white/10 flex items-center gap-[10px]">
+    <a href="{{ url('/admin/dashboard') }}" class="p-[25px_20px] text-[18px] font-bold text-white no-underline border-b border-white/10 flex items-center gap-[10px]">
         <span class="bg-primary-light text-sidebar-bg rounded-[6px] py-[2px] px-[6px] text-[16px]">S</span>
         SID Gn. Sembung
     </a>
@@ -50,6 +50,15 @@
         <li>
             <a href="{{ route('admin.aspirasi.index') }}" class="flex items-center p-[12px_20px] no-underline font-medium text-[14px] transition-all duration-200 border-l-[3px] {{ request()->is('admin/aspirasi*') ? 'bg-[#14B8A61A] text-primary-light !border-primary-light' : 'text-[#CBD5E1] border-transparent hover:bg-sidebar-hover hover:text-white' }}">
                 <span class="w-[24px] mr-[10px] text-[18px] text-center">💬</span> Aspirasi Warga
+            </a>
+        </li>
+                <li class="mt-[20px] mb-[5px] px-[20px]">
+            <span class="text-[11px] font-bold text-gray-500 uppercase tracking-wider">Pengaturan Sistem</span>
+        </li>
+
+        <li>
+            <a href="{{ route('admin.akun.index') }}" class="flex items-center p-[12px_20px] no-underline font-medium text-[14px] transition-all duration-200 border-l-[3px] {{ request()->is('admin/kelola-petugas*') ? 'bg-[#14B8A61A] text-primary-light !border-primary-light' : 'text-[#CBD5E1] border-transparent hover:bg-sidebar-hover hover:text-white' }}">
+                <span class="w-[24px] mr-[10px] text-[18px] text-center">👤</span> Kelola Petugas
             </a>
         </li>
     </ul>

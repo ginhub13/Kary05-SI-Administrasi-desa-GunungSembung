@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\AdminKabarBeritaController;
 use App\Http\Controllers\Admin\AdminKeuanganController;
 use App\Http\Controllers\Admin\AdminPembangunanController;
 use App\Http\Controllers\Admin\AdminPemerintahanController;
+use App\Http\Controllers\Admin\KelolaAkunController;
 use App\Http\Controllers\Publik\PublikProfileController;
 use App\Http\Controllers\Publik\HakMasyarakatController;
 use App\Http\Controllers\Publik\PublikAspirasiController;
@@ -100,5 +101,8 @@ Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 
             // route kelola laporan pembangunan
             Route::resource('pembangunan', AdminPembangunanController::class);
+
+
+            Route::resource('akun', KelolaAkunController::class);
             });
         });

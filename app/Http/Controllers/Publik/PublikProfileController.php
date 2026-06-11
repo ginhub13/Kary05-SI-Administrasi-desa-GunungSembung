@@ -2,19 +2,23 @@
 
 namespace App\Http\Controllers\Publik;
 use App\Http\Controllers\Controller;
+use App\Models\ProfilDesa;
 use App\Models\PotensiDesa;
+use App\Models\FasilitasPublik;
+
+
 class PublikProfileController extends Controller
 {
 
     public function index()
     {
         // 1. Ambil Data Potensi Desa (Maksimal 3 untuk Landing Page)
-        $modelPotensi = new \App\Models\PotensiDesa();
+        $modelPotensi = new PotensiDesa();
         // Karena status_publikasi dikembalikan, pastikan hanya memanggil yang berstatus 'publish' (jika Anda sudah membuat scope atau query where)
         $dataPotensi = $modelPotensi->where('status_publikasi', 'publish')->latest()->get();
 
         // 2. Ambil Data Profil Desa untuk Section About
-        $profil = \App\Models\ProfilDesa::first();
+        $profil = ProfilDesa::first();
 
         // Siapkan kerangka data bawaan (dummy default)
         $dummyData = [
@@ -63,8 +67,8 @@ class PublikProfileController extends Controller
      */
     public function profile()
     {
-        $profil = \App\Models\ProfilDesa::first();
-        $dataFasilitas = \App\Models\FasilitasPublik::oldest()->get();
+        $profil = ProfilDesa::first();
+        $dataFasilitas = FasilitasPublik::oldest()->get();
 
         // 1. Siapkan kerangka data bawaan (dummy default)
         $dummyData = [

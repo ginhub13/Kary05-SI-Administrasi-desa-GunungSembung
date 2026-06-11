@@ -28,7 +28,7 @@
             LKPPD
         </button>
         <button data-filter="ILPPD" class="filter-btn bg-white text-text-muted border border-text-muted px-[25px] py-[10px] rounded-full cursor-pointer font-semibold transition-all duration-300 hover:bg-primary hover:text-white hover:border-primary">
-            ILPPD (Publik)
+            ILPPD
         </button>
     </div>
 
