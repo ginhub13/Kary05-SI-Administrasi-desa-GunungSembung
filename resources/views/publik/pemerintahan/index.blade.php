@@ -52,6 +52,7 @@
                     <h3 class="text-[16px] font-bold text-text-main line-clamp-2 leading-snug mb-[5px] group-hover:text-primary transition-colors">
                         {{ $dokumen->judul_dokumen }}
                     </h3>
+                    <p class="text-[12px] text-text-muted font-medium m-0">Ukuran file: {{ $dokumen->ukuran_file_kb }} KB</p>
                 </div>
             </div>
             

@@ -13,13 +13,14 @@ class AdminPembangunanController extends Controller
     /**
      * Skenario Index: Menampilkan daftar kegiatan pembangunan
      */
-    public function index()
-    {        
-        // Mengambil dokumen pembangunan untuk ditampilkan di index 
-        $dokumenPembangunan = Dokumen::whereIn('kategori_dokumen', ['RPJMDes', 'RKPDes'])->get();
+public function index()
+{        
+    $dokumenPembangunan = Dokumen::whereIn('kategori_dokumen', ['RPJMDes', 'RKPDes'])
+                                  ->orderBy('created_at', 'desc') // terbaru di atas
+                                  ->get();
 
-        return view('admin.pembangunan.index', compact('dokumenPembangunan'));
-    }
+    return view('admin.pembangunan.index', compact('dokumenPembangunan'));
+}
 
     /**
      * Skenario Unggah Dokumen: Menyimpan file PDF RPJMDes / RKPDes

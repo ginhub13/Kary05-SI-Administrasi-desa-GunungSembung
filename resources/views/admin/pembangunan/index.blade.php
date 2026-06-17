@@ -21,16 +21,10 @@
 
     {{-- Error Validasi --}}
     @if($errors->any())
-        <div class="bg-red-50 border-l-[4px] border-red-500 p-[15px] rounded-[8px] text-red-700 text-[14px] font-medium shadow-sm flex items-start gap-[10px]">
-            <span class="mt-[2px]">❌</span>
-            <div>
-                <span class="font-bold">Terjadi kesalahan:</span>
-                <ul class="list-disc list-inside mt-[5px]">
-                    @foreach($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
+        <div class="bg-red-50 border-l-[4px] border-red-500 p-[15px] rounded-[8px] text-red-700 text-[14px] font-medium shadow-sm flex flex-col gap-[5px]">
+            @foreach($errors->all() as $error)
+                <span>❌ {{ $error }}</span>
+            @endforeach
         </div>
     @endif
 
@@ -107,31 +101,47 @@
         <form action="{{ route('admin.pembangunan.store') }}" method="POST" enctype="multipart/form-data" class="p-[20px] flex flex-col gap-[15px]">
             @csrf
             
+            {{-- Judul Dokumen --}}
             <div>
                 <label class="block text-[13px] font-bold mb-[8px] uppercase text-text-main">Judul Dokumen <span class="text-red-500">*</span></label>
-                <input type="text" name="judul_dokumen" required placeholder="Contoh: RPJMDes Gunung Sembung 2024-2030" class="w-full bg-bg-color border border-border px-[15px] py-[10px] rounded-[8px] text-[14px] text-text-main outline-none focus:border-primary-light transition-colors">
+                <input type="text" name="judul_dokumen" value="{{ old('judul_dokumen') }}" required placeholder="Contoh: RPJMDes Gunung Sembung 2024-2030" class="w-full bg-bg-color border border-border px-[15px] py-[10px] rounded-[8px] text-[14px] text-text-main outline-none focus:border-primary-light transition-colors">
+                @error('judul_dokumen')
+                    <p class="text-red-500 text-[12px] mt-[5px] font-medium">{{ $message }}</p>
+                @enderror
             </div>
             
+            {{-- Kategori & Tahun --}}
             <div class="flex flex-col md:flex-row gap-[15px]">
                 <div class="flex-1">
                     <label class="block text-[13px] font-bold mb-[8px] uppercase text-text-main">Kategori <span class="text-red-500">*</span></label>
                     <select name="kategori_dokumen" required class="w-full bg-bg-color border border-border px-[15px] py-[10px] rounded-[8px] text-[14px] text-text-main outline-none focus:border-primary-light transition-colors cursor-pointer appearance-none">
-                        <option value="" disabled selected>-- Pilih --</option>
-                        <option value="RPJMDes">RPJMDes</option>
-                        <option value="RKPDes">RKPDes</option>
+                        <option value="" disabled {{ old('kategori_dokumen') ? '' : 'selected' }}>-- Pilih --</option>
+                        <option value="RPJMDes" {{ old('kategori_dokumen') == 'RPJMDes' ? 'selected' : '' }}>RPJMDes</option>
+                        <option value="RKPDes" {{ old('kategori_dokumen') == 'RKPDes' ? 'selected' : '' }}>RKPDes</option>
                     </select>
+                    @error('kategori_dokumen')
+                        <p class="text-red-500 text-[12px] mt-[5px] font-medium">{{ $message }}</p>
+                    @enderror
                 </div>
                 <div class="w-full md:w-[120px]">
                     <label class="block text-[13px] font-bold mb-[8px] uppercase text-text-main">Tahun <span class="text-red-500">*</span></label>
-                    <input type="number" name="tahun" required value="{{ date('Y') }}" class="w-full bg-bg-color border border-border px-[15px] py-[10px] rounded-[8px] text-[14px] text-text-main outline-none focus:border-primary-light transition-colors text-center font-bold">
+                    <input type="number" name="tahun" value="{{ old('tahun', date('Y')) }}" required class="w-full bg-bg-color border border-border px-[15px] py-[10px] rounded-[8px] text-[14px] text-text-main outline-none focus:border-primary-light transition-colors text-center font-bold">
+                    @error('tahun')
+                        <p class="text-red-500 text-[12px] mt-[5px] font-medium">{{ $message }}</p>
+                    @enderror
                 </div>
             </div>
 
+            {{-- File PDF --}}
             <div>
                 <label class="block text-[13px] font-bold mb-[8px] uppercase text-text-main">Pilih File (PDF) <span class="text-red-500">*</span></label>
                 <input type="file" name="file_dokumen" accept=".pdf" required class="w-full bg-bg-color border border-border px-[15px] py-[8px] rounded-[8px] text-[14px] text-text-muted file:mr-[15px] file:py-[6px] file:px-[15px] file:rounded-[6px] file:border-0 file:text-[13px] file:font-semibold file:bg-primary-light file:text-white hover:file:bg-opacity-90 cursor-pointer transition-colors">
+                @error('file_dokumen')
+                    <p class="text-red-500 text-[12px] mt-[5px] font-medium">{{ $message }}</p>
+                @enderror
             </div>
 
+            {{-- Tombol --}}
             <div class="pt-[15px] border-t border-border flex justify-end gap-[10px] mt-[5px]">
                 <button type="button" onclick="closeModal()" class="bg-white border border-border text-text-main px-[20px] py-[10px] rounded-[8px] font-semibold text-[14px] hover:bg-gray-50 transition-colors cursor-pointer">Batal</button>
                 <button type="submit" class="bg-primary-light text-white px-[25px] py-[10px] rounded-[8px] font-semibold text-[14px] hover:brightness-110 transition-all cursor-pointer">Mulai Unggah</button>
