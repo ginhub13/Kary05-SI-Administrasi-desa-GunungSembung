@@ -98,7 +98,7 @@ class AdminKabarBeritaController extends Controller
             'judul' => 'required|string|max:255',
             'kategori' => 'required|string',
             'status_terbit' => 'required|in:Draft,Terbit',
-            'gambar_sampul' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'gambar_sampul' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:10240',
             'konten' => 'required|string',
         ]);
 
