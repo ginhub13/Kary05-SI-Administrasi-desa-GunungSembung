@@ -111,7 +111,7 @@
             <div>
                 <label class="block text-[12px] font-bold mb-[6px] text-text-muted uppercase">Bukti Foto Laporan (Opsional)</label>
                 <input type="file" name="foto_lampiran" accept="image/*" class="w-full bg-gray-50 border border-border p-[8px] rounded-md text-[13px] file:mr-[10px] file:border-0 file:bg-primary/10 file:text-primary file:font-semibold file:px-[12px] file:py-[4px] file:rounded">
-                <span class="block text-[11px] text-text-muted mt-[4px]">*Format JPG/PNG maksimal 3MB.</span>
+                <span class="block text-[11px] text-text-muted mt-[4px]">*Format JPG/PNG maksimal 10MB.</span>
                 @error('foto_lampiran')
                     <span class="text-red-500 text-[12px] font-medium mt-[5px] block">{{ $message }}</span>
                 @enderror

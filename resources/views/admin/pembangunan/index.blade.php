@@ -93,7 +93,7 @@
         <div class="flex justify-between items-center p-[20px] border-b border-border">
             <div>
                 <h2 class="text-[18px] font-bold text-text-main">Unggah Dokumen Perencanaan</h2>
-                <p class="text-[12px] text-text-muted mt-[2px]">Format yang diizinkan hanya .PDF (Maks. 5MB)</p>
+                <p class="text-[12px] text-text-muted mt-[2px]">Format yang diizinkan hanya .PDF (Maks. 10MB)</p>
             </div>
             <button onclick="closeModal()" class="text-[#94A3B8] hover:text-red-500 text-[28px] leading-none cursor-pointer transition-colors">&times;</button>
         </div>

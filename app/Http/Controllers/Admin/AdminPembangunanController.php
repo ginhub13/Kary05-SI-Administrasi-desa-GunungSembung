@@ -31,10 +31,10 @@ public function index()
             'judul_dokumen' => 'required|string|max:255',
             'kategori_dokumen' => 'required|in:RPJMDes,RKPDes',
             'tahun' => 'required|string|size:4',
-            'file_dokumen' => 'required|file|mimes:pdf|max:5120', // Maks 5MB, format PDF
+            'file_dokumen' => 'required|file|mimes:pdf|max:10240', // Maks 10MB, format PDF
         ], [
             'file_dokumen.mimes' => 'Dokumen wajib berformat PDF.',
-            'file_dokumen.max' => 'Ukuran file maksimal 5MB.',
+            'file_dokumen.max' => 'Ukuran file maksimal 10MB.',
         ]);
 
         if ($request->hasFile('file_dokumen')) {

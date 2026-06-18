@@ -29,7 +29,7 @@ class PublikAspirasiController extends Controller
                 'kategori'      => 'required|string',
                 'judul'         => 'required|string|max:255',
                 'pesan'         => 'required|string',
-                'foto_lampiran' => 'nullable|image|mimes:jpeg,png,jpg|max:3072', // Maks 3MB
+                'foto_lampiran' => 'nullable|image|mimes:jpeg,png,jpg|max:10240', // Maks 10MB
             ], [
                 // Kustomisasi pesan error agar lebih ramah untuk warga
                 'nama_pengirim.required' => 'Kolom Nama Lengkap wajib diisi.',
@@ -38,7 +38,7 @@ class PublikAspirasiController extends Controller
                 'kategori.required'      => 'Silakan pilih Kategori Aduan.',
                 'pesan.required'         => 'Isi Pesan/Rincian Aduan tidak boleh kosong.',
                 'foto_lampiran.mimes'    => 'Format foto harus berupa JPG, JPEG, atau PNG.',
-                'foto_lampiran.max'      => 'Ukuran foto lampiran maksimal 3MB.',
+                'foto_lampiran.max'      => 'Ukuran foto lampiran maksimal 10MB.',
             ]);
 
             // Proses unggah foto bukti jika ada
